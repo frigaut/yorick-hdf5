@@ -1,0 +1,173 @@
+/*
+ * hdf5doc.txt
+ * documentation for the yorick hdf5 plugin
+ *
+ * $Id: hdf5doc.txt,v 1.1 2007-12-27 15:10:25 frigaut Exp $
+ *
+ * Author: Francois Rigaut.
+ * Written 2004
+ * last revision/addition: 2007dec26
+ *
+ * Copyright (c) 2003, Francois RIGAUT (frigaut@gemini.edu, Gemini
+ * Observatory, 670 N A'Ohoku Place, HILO HI-96720).
+ *
+ * This program is free software; you can redistribute it and/or  modify it
+ * under the terms of the GNU General Public License  as  published  by the
+ * Free Software Foundation; either version 2 of the License,  or  (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope  that  it  will  be  useful, but
+ * WITHOUT  ANY   WARRANTY;   without   even   the   implied   warranty  of
+ * MERCHANTABILITY or  FITNESS  FOR  A  PARTICULAR  PURPOSE.   See  the GNU
+ * General Public License for more details (to receive a  copy  of  the GNU
+ * General Public License, write to the Free Software Foundation, Inc., 675
+ * Mass Ave, Cambridge, MA 02139, USA).
+ *
+ * $Log: hdf5doc.txt,v $
+ * Revision 1.1  2007-12-27 15:10:25  frigaut
+ * Initial revision
+ *
+ */
+
+                    HDF5 yorick plugin documentation
+                    ================================
+
+                    ********************************
+                    ******* DRAFT 2005dec11 ********
+                    ********************************
+
+1. Overview
+
+This plugin uses libhdf5, version 1.6.4 or greater. It will probably
+work with slightly lesser version, but I haven't tested it. The
+current version avilable from the NSCA site is (dec2005) is 1.6.5.
+
+This plugin provide a minimal interface to HDF5 (Hierarchical Data
+Format 5). I am not going to expand on HDF5 here. Suffice to say that
+this format provides a way to store heterogeneous data in a single
+file entity. The data are stored under a hierarchical directory
+structure (hence the name), like:
+
+/header
+/header/date
+/header/time
+/header/author
+/2005mar25/data/raw/time_vector
+/2005mar25/data/raw/entropy
+etc...
+
+A directory (e.g. /header) is called a "Group".
+A scalar/vector/array of numbers/strings is called "Dataset".
+
+One can also set and store attribute to groups or datasets.
+
+Here is an example of a file as dumped by the h5info function:
+
+> h5info,"data.h5",att=1
+/2005mar04                       GROUP   
+                                 ATTRIB(0): Temp on this date             
+                                 ATTRIB(1): cups of coffee                
+/2005mar04/comments              DATASET   STRING  DIMSOF()=[1,2]
+/2005mar04/data                  DATASET   DOUBLE  DIMSOF()=[1,100]
+/2005mar04/dewpoint              DATASET   DOUBLE  SCALAR
+/2005mar04/time                  DATASET   DOUBLE  DIMSOF()=[1,100]
+                                 ATTRIB(0): Units                         
+                                 ATTRIB(1): Units2                        
+/2005mar05                       GROUP   
+/2005mar05/name with blanks      DATASET   DOUBLE  SCALAR
+/HL                              HARDLINK -> /2005mar04
+/bestdata                        SOFTLINK -> /2005mar04
+>                                      
+
+which is, I believe, pretty much self-explanatory. Note the hardlink
+and softlink references at the end (which are what they say they are:
+links to other groups in this file).
+
+
+
+2. FUNCTION API
+
+As of v0.6, there are only a handfull of functions, but they should
+provide most of the functionality to save regular datas (with the
+exception of structure and pointers). These functions are:
+
+
+  DATA I/O:
+     h5read(fname,target)                     return data
+     h5write,fname,fullpath,data,zip=         write data
+     h5open(filename,mode)                    return file handle
+     h5close(filename)                        close file
+
+   INFO, GROUP LINKING:
+     h5info,fname,target,att=                 print out file info/structure
+     h5link(fname,group,group2link2,linktype) link datasets
+     h5delete,fname,object                    delete data
+
+   ATTRIBUTE I/O:
+     h5awrite(fname,object,aname,attdata)     write an object attribute
+     h5aread(fname,object,aname)              read an object attribute
+     h5adelete,fname,object,aname             delete an object attribute
+
+   MISC:
+     h5list_open                              list open files
+     h5version                                return linhdf5 version
+     
+   ERROR RECOVERY
+     h5off                                    close all reference to the
+                                              h5 library (clean up).
+
+Each function is detailled below:
+
+
+2.1 Data I/O:
+
+2.1.1 h5open
+
+fd = h5open(filename,mode);
+
+Opens file "filename" in mode "mode".
+mode can be "r" (read-only), "w" (write-only) or "a" (append).
+
+This function returns a file descriptor fd that can be used until released by a call to h5close. fd can be used with h5read and h5open (see below).
+
+Warning: when a file is opened with h5open, it will have to be explicitely closed with h5close. If a file is open in read-only and one try to reopen it in write-only, it will cause a error (and vice-versa)
+
+
+2.1.2 h5write
+
+h5write,filename,fullpath_to_dataset,data,zip=,mode=
+
+write "data" as object "fullpath" in file "fname".
+
+fname can be either a string (filename) or a file descriptor returned
+by h5open.
+
+The scalar string fullpath contains the full path to the dataset
+(/full/path/dataname).
+
+"data" are the data. Any yorick type is valid and will be saved as
+such.
+ 
+zip is a long 0-9. if set, data will be compressed (the larger the
+number, the more compression, and the larger the compression time).
+
+mode can be set here (when fname is a string). Use "a" it to append
+data to an existing file. Default is to overwrite ("w").
+
+2.1.3 h5read
+
+result = h5read(filename,dataset)
+
+return the data pointed to by the scalar string "dataset" in file
+"filename". 
+
+2.1.4 h5close
+
+h5close,file
+
+Close all references to the file pointed at by "file". File can either
+be a scalar string or a file descriptor (as the one returned by
+h5open()).
+
+
+to be continued...
