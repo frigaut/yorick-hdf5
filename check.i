@@ -1,4 +1,4 @@
-// $Id: check.i,v 1.1 2007-12-27 15:10:25 frigaut Exp $
+// $Id: check.i,v 1.1.1.1 2007-12-27 15:10:25 frigaut Exp $
 
 require,"hdf5.i";
 require,"fits.i";

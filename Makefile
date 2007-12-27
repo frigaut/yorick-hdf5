@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.1 2007-12-27 15:10:24 frigaut Exp $
+# $Id: Makefile,v 1.1.1.1 2007-12-27 15:10:24 frigaut Exp $
 Y_MAKEDIR=/usr/lib/yorick
 Y_EXE=/usr/lib/yorick/bin/yorick
 Y_EXE_PKGS=

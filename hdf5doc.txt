@@ -2,7 +2,7 @@
  * hdf5doc.txt
  * documentation for the yorick hdf5 plugin
  *
- * $Id: hdf5doc.txt,v 1.1 2007-12-27 15:10:25 frigaut Exp $
+ * $Id: hdf5doc.txt,v 1.1.1.1 2007-12-27 15:10:25 frigaut Exp $
  *
  * Author: Francois Rigaut.
  * Written 2004
@@ -24,8 +24,8 @@
  * Mass Ave, Cambridge, MA 02139, USA).
  *
  * $Log: hdf5doc.txt,v $
- * Revision 1.1  2007-12-27 15:10:25  frigaut
- * Initial revision
+ * Revision 1.1.1.1  2007-12-27 15:10:25  frigaut
+ * Initial Import - yorick-hdf5
  *
  */
 

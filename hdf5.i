@@ -2,7 +2,7 @@ HDF5_VERSION = "0.6.1";
 
 /* HDF5 Yorick plugin, version 0.6
  *
- * $Id: hdf5.i,v 1.1 2007-12-27 15:10:25 frigaut Exp $
+ * $Id: hdf5.i,v 1.1.1.1 2007-12-27 15:10:25 frigaut Exp $
  *
  * Francois Rigaut, February 2005
  * Created: 24 February 2005
@@ -24,8 +24,8 @@ HDF5_VERSION = "0.6.1";
  *   initial revision
  *
  * $Log: hdf5.i,v $
- * Revision 1.1  2007-12-27 15:10:25  frigaut
- * Initial revision
+ * Revision 1.1.1.1  2007-12-27 15:10:25  frigaut
+ * Initial Import - yorick-hdf5
  *
  *
  * Copyright (c) 2005, Francois RIGAUT (frigaut@gemini.edu, Gemini

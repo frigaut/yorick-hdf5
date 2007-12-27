@@ -2,7 +2,7 @@
  * hdf5.c
  * wrapper routines for the hdf5 c library
  *
- * $Id: hdf5.c,v 1.1 2007-12-27 15:10:25 frigaut Exp $
+ * $Id: hdf5.c,v 1.1.1.1 2007-12-27 15:10:25 frigaut Exp $
  *
  * Author: Francois Rigaut.
  * Written 2004
@@ -24,8 +24,8 @@
  * Mass Ave, Cambridge, MA 02139, USA).
  *
  * $Log: hdf5.c,v $
- * Revision 1.1  2007-12-27 15:10:25  frigaut
- * Initial revision
+ * Revision 1.1.1.1  2007-12-27 15:10:25  frigaut
+ * Initial Import - yorick-hdf5
  *
  */
 
