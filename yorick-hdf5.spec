@@ -1,6 +1,6 @@
 %define name yorick-hdf5
-%define version 0.6.01
-%define release gemini2007dec07
+%define version 0.6.1
+%define release gemini2007dec31
 
 Summary: yorick HDF5 plugin
 Name: %{name}
@@ -71,14 +71,14 @@ fi;
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/usr/lib/yorick/lib
-mkdir -p $RPM_BUILD_ROOT/usr/lib/yorick/doc
 mkdir -p $RPM_BUILD_ROOT/usr/lib/yorick/i0
 mkdir -p $RPM_BUILD_ROOT/usr/lib/yorick/i-start
+mkdir -p $RPM_BUILD_ROOT/usr/share/doc/yorick-hdf5
 
 install -m 755 hdf5.so $RPM_BUILD_ROOT/usr/lib/yorick/lib
-install -m 644 hdf5doc.txt $RPM_BUILD_ROOT/usr/lib/yorick/doc
 install -m 644 *.i $RPM_BUILD_ROOT/usr/lib/yorick/i0
 install -m 644 *_start.i $RPM_BUILD_ROOT/usr/lib/yorick/i-start
+install -m 644 hdf5doc.txt $RPM_BUILD_ROOT/usr/share/doc/yorick-hdf5
 
 rm $RPM_BUILD_ROOT/usr/lib/yorick/i0/*_start.i
 
@@ -89,8 +89,11 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 /usr/lib/yorick/lib/hdf5.so
-/usr/lib/yorick/doc/hdf5doc.txt
 /usr/lib/yorick/i0/*.i
 /usr/lib/yorick/i-start/*_start.i
+/usr/share/doc/yorick-hdf5/hdf5doc.txt
 
 %changelog
+* Mon Dec 31 2007 <frigaut@users.sourceforge.net>
+- new distro directory structure
+- updated cvs

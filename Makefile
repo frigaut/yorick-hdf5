@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.1 2007-12-27 15:10:24 frigaut Exp $
+# $Id: Makefile,v 1.2 2008-01-02 18:26:08 frigaut Exp $
 Y_MAKEDIR=/usr/lib/yorick
 Y_EXE=/usr/lib/yorick/bin/yorick
 Y_EXE_PKGS=
@@ -73,8 +73,6 @@ clean::
 # for the binary package production (add full path to lib*.a below):
 # macosx:
 PKG_DEPLIBS_STATIC=-lm -lz /usr/lib/libhdf5.a
-# linux:
-PKG_DEPLIBS_STATIC=-lm -lz -lhdf5
 PKG_ARCH = $(OSTYPE)-$(MACHTYPE)
 # or linux or windows
 PKG_VERSION = $(shell (awk '{if ($$1=="Version:") print $$2}' $(PKG_NAME).info))
