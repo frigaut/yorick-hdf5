@@ -1,6 +1,6 @@
 %define name yorick-hdf5
 %define version 0.6.1
-%define release gemini2007dec31
+%define release gemini2008jan09
 
 Summary: yorick HDF5 plugin
 Name: %{name}
@@ -72,15 +72,18 @@ fi;
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/usr/lib/yorick/lib
 mkdir -p $RPM_BUILD_ROOT/usr/lib/yorick/i0
+mkdir -p $RPM_BUILD_ROOT/usr/lib/yorick/i
 mkdir -p $RPM_BUILD_ROOT/usr/lib/yorick/i-start
 mkdir -p $RPM_BUILD_ROOT/usr/share/doc/yorick-hdf5
+mkdir -p $RPM_BUILD_ROOT/usr/lib/yorick/packages/installed
 
 install -m 755 hdf5.so $RPM_BUILD_ROOT/usr/lib/yorick/lib
-install -m 644 *.i $RPM_BUILD_ROOT/usr/lib/yorick/i0
+install -m 644 hdf5.i $RPM_BUILD_ROOT/usr/lib/yorick/i0
+install -m 644 yorick-hdf5_check.i $RPM_BUILD_ROOT/usr/lib/yorick/i
 install -m 644 *_start.i $RPM_BUILD_ROOT/usr/lib/yorick/i-start
 install -m 644 hdf5doc.txt $RPM_BUILD_ROOT/usr/share/doc/yorick-hdf5
-
-rm $RPM_BUILD_ROOT/usr/lib/yorick/i0/*_start.i
+install -m 644 LICENSE $RPM_BUILD_ROOT/usr/share/doc/yorick-hdf5
+install -m 644 hdf5.info $RPM_BUILD_ROOT/usr/lib/yorick/packages/installed
 
 
 %clean
@@ -90,10 +93,15 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 /usr/lib/yorick/lib/hdf5.so
 /usr/lib/yorick/i0/*.i
+/usr/lib/yorick/i/*.i
 /usr/lib/yorick/i-start/*_start.i
-/usr/share/doc/yorick-hdf5/hdf5doc.txt
+/usr/share/doc/yorick-hdf5/
+/usr/lib/yorick/packages/installed/*
 
 %changelog
+* Tue Jan 09 2008 <frigaut@users.sourceforge.net>
+- included the info file for compat with pkg_mngr
+
 * Mon Dec 31 2007 <frigaut@users.sourceforge.net>
 - new distro directory structure
 - updated cvs
