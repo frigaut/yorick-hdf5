@@ -1,6 +1,6 @@
 %define name yorick-hdf5
-%define version 0.6.1
-%define release gemini2008jan09
+%define version 0.6.2
+%define release gemini2008nov13
 
 Summary: yorick HDF5 plugin
 Name: %{name}
@@ -99,6 +99,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/yorick/packages/installed/*
 
 %changelog
+* Thu Nov 13 2008 <frigaut@users.sourceforge.net>
+- fixed swapped dimensions and array shape w.r.t h5dump
+
 * Tue Jan 09 2008 <frigaut@users.sourceforge.net>
 - included the info file for compat with pkg_mngr
 

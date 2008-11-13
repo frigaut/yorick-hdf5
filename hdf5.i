@@ -1,8 +1,8 @@
-HDF5_VERSION = "0.6.1";
+HDF5_VERSION = "0.6.2";
 
-/* HDF5 Yorick plugin, version 0.6
+/* HDF5 Yorick plugin
  *
- * $Id: hdf5.i,v 1.1 2007-12-27 15:10:25 frigaut Exp $
+ * $Id: hdf5.i,v 1.2 2008-11-13 21:19:44 frigaut Exp $
  *
  * Francois Rigaut, February 2005
  * Created: 24 February 2005
@@ -24,8 +24,12 @@ HDF5_VERSION = "0.6.1";
  *   initial revision
  *
  * $Log: hdf5.i,v $
- * Revision 1.1  2007-12-27 15:10:25  frigaut
- * Initial revision
+ * Revision 1.2  2008-11-13 21:19:44  frigaut
+ * - Fixed swapped array dimension and messed up array shape
+ *   as reported by David Strozzi.
+ *
+ * Revision 1.1.1.1  2007/12/27 15:10:25  frigaut
+ * Initial Import - yorick-hdf5
  *
  *
  * Copyright (c) 2005, Francois RIGAUT (frigaut@gemini.edu, Gemini
@@ -232,6 +236,7 @@ func h5info(file,target,att=,_recur=)
       if (rank) {
         dims = maxdims = array(long,rank);
         status = _H5Sget_simple_extent_dims(dspid,dims,maxdims);
+        dims = dims(::-1); // dim bug fix
       } 
       // get type:
       yt=yotype(_H5Dget_type(dataset));
@@ -528,6 +533,7 @@ func h5read(file,target)
   if (rank) {
     dims = maxdims = array(long,rank);
     status = _H5Sget_simple_extent_dims(dspid,dims,maxdims);
+    dims = dims(::-1); // dim bug fix
   } else {dims=0;}
   
   ytype=yotype(_H5Dget_type(dataset),h5type);
@@ -570,7 +576,7 @@ func h5write(file,fullpath,data,zip=,mode=)
    zip=N     will use compression (N=0-9). Larger N will
              compress more (but take longer).
 
-   mode=     "w"=write-only (erase previous content) or "a"=append
+   mode=     "w"=write-only (erase previous content, default) or "a"=append
 
    Warning:  If file is a string, then mode="w" is used,
              which means an existing file will be overwritten.
@@ -623,7 +629,10 @@ func h5write(file,fullpath,data,zip=,mode=)
 
   // Determine dimsof() data
   rank = dimsof(data)(1);
-  if (rank>0) { dims = dimsof(data)(2:); }
+  if (rank>0) {
+    dims = dimsof(data)(2:);
+    dims = dims(::-1);   // dim bug fix
+  }
 
   if (rank==0) {
     dataspace = _H5Screate(H5S_SCALAR);
@@ -807,6 +816,7 @@ func h5aread(file,object,aname)
   if (rank) {
     dims = maxdims = array(long,rank);
     status = _H5Sget_simple_extent_dims(dspid,dims,maxdims);
+    dims = dims(::-1); // dim bug fix
   } else {dims=0;}
   
   ytype=yotype(_H5Aget_type(attid),h5type);
@@ -885,6 +895,7 @@ func h5awrite(file,object,aname,attdata)
   rank = dimsof(attdata)(1);
   if (rank>0) {
     dims = dimsof(attdata)(2:);
+    dims = dims(::-1);  // dim bug fix
   }
 
   if (rank==0) {
