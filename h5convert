@@ -1,0 +1,2 @@
+#!/bin/sh
+yorick -q -i h5convert_fromshell.i $*

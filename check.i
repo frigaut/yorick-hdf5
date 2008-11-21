@@ -1,4 +1,4 @@
-// $Id: check.i,v 1.1 2007-12-27 15:10:25 frigaut Exp $
+// $Id: check.i,v 1.2 2008-11-21 16:19:17 frigaut Exp $
 
 require,"hdf5.i";
 require,"fits.i";
@@ -15,7 +15,7 @@ func checkhdf5(notiming=,keep=)
 {
   if (notiming==[]) notiming=1;
   d1 = span(0,60,100);
-  d2 = random_n(100);
+  d2 = random_n([2,3,5]);
   d3 = 5.678;
   d4 = ["history list","written on 2005nov8"];
   a1 = 20.6;

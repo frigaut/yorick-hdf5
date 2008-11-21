@@ -1,6 +1,6 @@
 %define name yorick-hdf5
-%define version 0.6.2
-%define release gemini2008nov13
+%define version 0.7.0
+%define release gemini2008nov21
 
 Summary: yorick HDF5 plugin
 Name: %{name}
@@ -76,14 +76,19 @@ mkdir -p $RPM_BUILD_ROOT/usr/lib/yorick/i
 mkdir -p $RPM_BUILD_ROOT/usr/lib/yorick/i-start
 mkdir -p $RPM_BUILD_ROOT/usr/share/doc/yorick-hdf5
 mkdir -p $RPM_BUILD_ROOT/usr/lib/yorick/packages/installed
+mkdir -p $RPM_BUILD_ROOT/usr/bin
 
 install -m 755 hdf5.so $RPM_BUILD_ROOT/usr/lib/yorick/lib
 install -m 644 hdf5.i $RPM_BUILD_ROOT/usr/lib/yorick/i0
+install -m 644 h5scan_fromshell.i $RPM_BUILD_ROOT/usr/lib/yorick/i0
+install -m 644 h5convert_fromshell.i $RPM_BUILD_ROOT/usr/lib/yorick/i0
 install -m 644 yorick-hdf5_check.i $RPM_BUILD_ROOT/usr/lib/yorick/i
 install -m 644 *_start.i $RPM_BUILD_ROOT/usr/lib/yorick/i-start
 install -m 644 hdf5doc.txt $RPM_BUILD_ROOT/usr/share/doc/yorick-hdf5
 install -m 644 LICENSE $RPM_BUILD_ROOT/usr/share/doc/yorick-hdf5
 install -m 644 hdf5.info $RPM_BUILD_ROOT/usr/lib/yorick/packages/installed
+install -m 755 h5info $RPM_BUILD_ROOT/usr/bin
+install -m 755 h5convert $RPM_BUILD_ROOT/usr/bin
 
 
 %clean
@@ -97,8 +102,13 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/yorick/i-start/*_start.i
 /usr/share/doc/yorick-hdf5/
 /usr/lib/yorick/packages/installed/*
+/usr/bin/h5info
+/usr/bin/h5convert
 
 %changelog
+* Fri Nov 21 2008 <frigaut@users.sourceforge.net>
+- v0.7.0: added h5old2new, and h5info and h5convert shell utilities
+
 * Thu Nov 13 2008 <frigaut@users.sourceforge.net>
 - fixed swapped dimensions and array shape w.r.t h5dump
 
