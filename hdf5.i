@@ -2,14 +2,17 @@ HDF5_VERSION = "0.7.0";
 
 /* HDF5 Yorick plugin
  *
- * $Id: hdf5.i,v 1.3 2008-11-21 16:19:17 frigaut Exp $
+ * $Id: hdf5.i,v 1.4 2008-11-21 17:29:47 frigaut Exp $
  *
  * Francois Rigaut, February 2005
  * Created: 24 February 2005
  * last revision/addition:
  *
  * $Log: hdf5.i,v $
- * Revision 1.3  2008-11-21 16:19:17  frigaut
+ * Revision 1.4  2008-11-21 17:29:47  frigaut
+ * - added some support for reading 64bits longs in a 32 bits OS
+ *
+ * Revision 1.3  2008/11/21 16:19:17  frigaut
  * - added h5old2new to convert pre-v0.6.2 files to post v0.6.2 file formats
  * - added h5convert and h5info shell wrappers
  * - added h5convert_fromshell.i and h5scan_fromshell.i to go with it.
@@ -1275,17 +1278,21 @@ func h5old2new(files,inplace=,verbose=,force=)
 func yotype(tid,&h5type) {
 
   tclass = _H5Tget_class(tid);
+
   if (tclass < 0) { 
-    write," Invalid datatype";
+    error,"Invalid datatype";
   } else {
 
     tsize=_H5Tget_size(tid);
+    if (hdf5_debug) write,format="tclass=%d  tsize=%d\n",tclass,tsize;
   
     if (tclass == H5T_INTEGER) {
       if (tsize==sizeof(long) )  {h5type=H5T_NATIVE_LONG;   return 0l;}
       if (tsize==sizeof(int)  )  {h5type=H5T_NATIVE_INT;    return 0n;}
       if (tsize==sizeof(short))  {h5type=H5T_NATIVE_SHORT;  return 0s;}
       if (tsize==sizeof(char) )  {h5type=H5T_NATIVE_CHAR;   return '0';}
+      // read 64bits long on a 32 bits OS:
+      if (tsize==8 )             {h5type=H5T_NATIVE_LONG;   return 0l;}
     } else if (tclass == H5T_FLOAT) {
       if (tsize==sizeof(float))  {h5type=H5T_NATIVE_FLOAT;  return 0.0f;}
       if (tsize==sizeof(double)) {h5type=H5T_NATIVE_DOUBLE; return 0.0;}
@@ -1296,6 +1303,7 @@ func yotype(tid,&h5type) {
       //      print,"Unknown Datatype";
       return -1;
     }
+    error,"Unknown or invalid datatype";
   }
 }
 
