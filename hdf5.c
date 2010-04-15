@@ -2,7 +2,7 @@
  * hdf5.c
  * wrapper routines for the hdf5 c library
  *
- * $Id: hdf5.c,v 1.1 2007-12-27 15:10:25 frigaut Exp $
+ * $Id: hdf5.c,v 1.2 2010-04-15 02:46:29 frigaut Exp $
  *
  * Author: Francois Rigaut.
  * Written 2004
@@ -24,8 +24,12 @@
  * Mass Ave, Cambridge, MA 02139, USA).
  *
  * $Log: hdf5.c,v $
- * Revision 1.1  2007-12-27 15:10:25  frigaut
- * Initial revision
+ * Revision 1.2  2010-04-15 02:46:29  frigaut
+ *
+ * updated to v0.8.0
+ *
+ * Revision 1.1.1.1  2007/12/27 15:10:25  frigaut
+ * Initial Import - yorick-hdf5
  *
  */
 
@@ -103,7 +107,8 @@ void Y__H5Areads(int nArgs)
   H5Aread(attid,atype,&buf);
 
   Array *a= PushDataBlock(NewArray(&stringStruct,strdims));
-  for (i=0;i<nelem;i++) a->value.q[i] = p_strcpy(buf[i]);
+  // below and 134: added (char *) on 2009/07/16
+  for (i=0;i<nelem;i++) a->value.q[i] = p_strcpy((char *)buf[i]);
 
   //free(buf);
 
@@ -130,7 +135,7 @@ void Y__H5Dreads(int nArgs)
   H5Dread(did,atype,0,0,0,&buf);
 
   Array *a= PushDataBlock(NewArray(&stringStruct,strdims));
-  for (i=0;i<nelem;i++) a->value.q[i] = p_strcpy(buf[i]);
+  for (i=0;i<nelem;i++) a->value.q[i] = p_strcpy((char *)buf[i]);
 
   PopTo(sp-nArgs-1);
   Drop(nArgs);
@@ -1070,6 +1075,160 @@ void Y__H5T_UNIX_D64LE(int nArgs)
 void Y__H5P_DATASET_CREATE(int nArgs)
 {
   PushIntValue((long)H5P_DATASET_CREATE);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5T_NO_CLASS(int nArgs)
+{
+  PushIntValue((long)H5T_NO_CLASS);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5T_INTEGER(int nArgs)
+{
+  PushIntValue((long)H5T_INTEGER);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5T_FLOAT(int nArgs)
+{
+  PushIntValue((long)H5T_FLOAT);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5T_TIME(int nArgs)
+{
+  PushIntValue((long)H5T_TIME);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5T_STRING(int nArgs)
+{
+  PushIntValue((long)H5T_STRING);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5T_BITFIELD(int nArgs)
+{
+  PushIntValue((long)H5T_BITFIELD);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5T_OPAQUE(int nArgs)
+{
+  PushIntValue((long)H5T_OPAQUE);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5T_COMPOUND(int nArgs)
+{
+  PushIntValue((long)H5T_COMPOUND);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5T_REFERENCE(int nArgs)
+{
+  PushIntValue((long)H5T_REFERENCE);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5T_ENUM(int nArgs)
+{
+  PushIntValue((long)H5T_ENUM);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5T_VLEN(int nArgs)
+{
+  PushIntValue((long)H5T_VLEN);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5T_ARRAY(int nArgs)
+{
+  PushIntValue((long)H5T_ARRAY);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5G_UNKNOWN(int nArgs)
+{
+  PushIntValue((long)H5G_UNKNOWN);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5G_GROUP(int nArgs)
+{
+  PushIntValue((long)H5G_GROUP);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5G_DATASET(int nArgs)
+{
+  PushIntValue((long)H5G_DATASET);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5G_TYPE(int nArgs)
+{
+  PushIntValue((long)H5G_TYPE);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5G_LINK(int nArgs)
+{
+  PushIntValue((long)H5G_LINK);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5P_DEFAULT(int nArgs)
+{
+  PushIntValue((long)H5P_DEFAULT);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+/*void Y__H5T_DEFAULT(int nArgs)
+{
+  PushIntValue((long)H5T_DEFAULT);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+  }*/
+
+void Y__H5S_NO_CLASS(int nArgs)
+{
+  PushIntValue((long)H5S_NO_CLASS);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5S_SCALAR(int nArgs)
+{
+  PushIntValue((long)H5S_SCALAR);
+  PopTo(sp-nArgs-1);
+  Drop(nArgs);
+}
+
+void Y__H5S_SIMPLE(int nArgs)
+{
+  PushIntValue((long)H5S_SIMPLE);
   PopTo(sp-nArgs-1);
   Drop(nArgs);
 }

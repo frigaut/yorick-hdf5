@@ -1,6 +1,6 @@
 Package: hdf5
 Kind: plugin
-Version: 0.7.0
+Version: 0.8.0
 Revision: 1
 Description: Hierarchical Data Format 5 interface
 License: GPL

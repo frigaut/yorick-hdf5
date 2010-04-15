@@ -1,17 +1,30 @@
-HDF5_VERSION = "0.7.0";
+HDF5_VERSION = "0.8.0";
 
 /* HDF5 Yorick plugin
  *
- * $Id: hdf5.i,v 1.5 2008-11-21 19:00:54 frigaut Exp $
+ * $Id: hdf5.i,v 1.6 2010-04-15 02:46:29 frigaut Exp $
  *
  * Francois Rigaut, February 2005
  * Created: 24 February 2005
  * last revision/addition:
  *
  * $Log: hdf5.i,v $
- * Revision 1.5  2008-11-21 19:00:54  frigaut
+ * Revision 1.6  2010-04-15 02:46:29  frigaut
+ *
+ * updated to v0.8.0
+ *
+ * 2009/09/16:
+ * - Version 0.8.0
+ * - I just realized today there was an issue with the new HDF5 APIs.
+ * added dynamic declaration of H5 static variable (from their value
+ * in the HDF5 include files).
+ * - Also, writting attributes with string value was to be broken (see
+ * note in h5awrite. Fixed by setting last param of H5Acreate to 0.
+ *
+ * Revision 1.5  2008/11/21 19:00:54  frigaut
  * - added some text to man page
  * - added warning mechanism through h5v062bug_warning() function.
+ * - version 0.7.1
  *
  * Revision 1.4  2008/11/21 17:29:47  frigaut
  * - added some support for reading 64bits longs in a 32 bits OS
@@ -674,7 +687,8 @@ func h5read(file,target,pre062=)
   dataset=_H5Dopen(file,target);
   if (dataset<0) {
     if (has2bclose) h5close,file;
-    error,"Unable to find Dataset";
+    return;
+    //error,"Unable to find Dataset";
   }
 
   // get dataspace id:
@@ -1053,7 +1067,7 @@ func h5awrite(file,object,aname,attdata,try=)
   }
 
 
-  props=H5T_DEFAULT;
+  props=H5P_DEFAULT;
 
   if (structof(attdata)==char) htype=H5T_NATIVE_CHAR;
   if (structof(attdata)==short) htype=H5T_NATIVE_SHORT;
@@ -1089,6 +1103,13 @@ func h5awrite(file,object,aname,attdata,try=)
     }
   }
 
+  // 20090916: from the new hdf5 doc (H5Acreate1): The attribute creation
+  // property list, acpl_id (the last one), is currently unused; it may be
+  // used in the future for optional attribute properties. At this time,
+  // H5P_DEFAULT is the only accepted value.
+  // hence, forcing props to zero (and that made it works, broken if props
+  // != 0, i.e. for strings -see above-):
+  props = 0;
   /* Create a dataset attribute. */
   attid = _H5Acreate(oid, aname, htype, dataspace, props);
   if (attid<0) {
@@ -1555,35 +1576,55 @@ H5F_ACC_EXCL   = 0x0004;  /* fail if file already exists*/
 H5F_ACC_DEBUG  = 0x0008;  /* print debug info	     */
 H5F_ACC_CREAT  = 0x0010;  /* create non-existing files  */
 
-H5P_DEFAULT    = 0;
+extern _H5P_DEFAULT;           H5P_DEFAULT=_H5P_DEFAULT();
+//extern _H5T_DEFAULT;           H5T_DEFAULT=_H5T_DEFAULT();
+
+//H5P_DEFAULT    = 0;
 H5T_DEFAULT    = 0;
 
-H5S_NO_CLASS   = -1;  /* error */
-H5S_SCALAR     = 0;   /* scalar variable */
-H5S_SIMPLE     = 1;   /* simple data space */
-H5S_COMPLEX    = 2;   /* complex data space */
+extern _H5S_NO_CLASS;          H5S_NO_CLASS=_H5S_NO_CLASS();  /* error */
+extern _H5S_SCALAR;            H5S_SCALAR=_H5S_SCALAR();   /* scalar variable */
+extern _H5S_SIMPLE;            H5S_SIMPLE=_H5S_SIMPLE();   /* simple data space */
 
-H5T_NO_CLASS   = -1;  /* error */
-H5T_INTEGER    = 0;   /* integer types */
-H5T_FLOAT      = 1;   /* floating-point types */
-H5T_TIME       = 2;   /* date and time types */
-H5T_STRING     = 3;   /* character string types */
-H5T_BITFIELD   = 4;   /* bit field types */
-H5T_OPAQUE     = 5;   /* opaque types */
-H5T_COMPOUND   = 6;   /* compound types */
-H5T_REFERENCE  = 7;   /* reference types  */
-H5T_ENUM       = 8;   /* enumeration types */
-H5T_VLEN       = 9;   /* Variable-Length types */
-H5T_ARRAY      = 10;  /* Array types */
+//H5S_NO_CLASS   = -1;  /* error */
+//H5S_SCALAR     = 0;   /* scalar variable */
+//H5S_SIMPLE     = 1;   /* simple data space */
+
+extern _H5T_NO_CLASS;          H5T_NO_CLASS=_H5T_NO_CLASS();  /* error */
+extern _H5T_INTEGER;           H5T_INTEGER=_H5T_INTEGER();    /* integer types */
+extern _H5T_FLOAT;             H5T_FLOAT=_H5T_FLOAT();        /* floating-point types */
+extern _H5T_TIME;              H5T_TIME=_H5T_TIME();          /* date and time types */
+extern _H5T_STRING;            H5T_STRING=_H5T_STRING();      /* character string types */
+extern _H5T_BITFIELD;          H5T_BITFIELD=_H5T_BITFIELD();  /* bit field types */
+extern _H5T_OPAQUE;            H5T_OPAQUE=_H5T_OPAQUE();      /* opaque types */
+extern _H5T_COMPOUND;          H5T_COMPOUND=_H5T_COMPOUND();  /* compound types */
+extern _H5T_REFERENCE;         H5T_REFERENCE=_H5T_REFERENCE();/* reference types  */
+extern _H5T_ENUM;              H5T_ENUM=_H5T_ENUM();          /* enumeration types */
+extern _H5T_VLEN;              H5T_VLEN=_H5T_VLEN();          /* Variable-Length types */
+extern _H5T_ARRAY;             H5T_ARRAY=_H5T_ARRAY();        /* Array types */
+
 
 H5T_VARIABLE   = -1;  /* Indicate that a string is variable length (null- */
                       /* terminated in C, instead of fixed length) */
 
-H5G_UNKNOWN    = -1;  /* Unknown object type */
-H5G_LINK       = 0;   /* Object is a symbolic link */
-H5G_GROUP      = 1;   /* Object is a group */
-H5G_DATASET    = 2;   /* Object is a dataset */
-H5G_TYPE       = 3;   /* Object is a named data type */
+/* 2009sep16: HDF5 was broken. This is because the typedef
+   for the following const was changed in the last hdf5 APIs,
+   and I stupidly declared it in here, instead of getting them
+   from hdf5 at build time. Thus I have rewritten this (below).
+   Here is how it appeared in previous version (<=0.7.1) of
+   this plugin:
+   H5G_UNKNOWN    = -1;
+   H5G_LINK       = 0;  // now 3
+   H5G_GROUP      = 1;  // now 0
+   H5G_DATASET    = 2;  // now 1
+   H5G_TYPE       = 3;  // now 2
+   and here is how I coded it now: */
+extern _H5G_UNKNOWN;   H5G_UNKNOWN=_H5G_UNKNOWN();
+extern _H5G_GROUP;     H5G_GROUP=_H5G_GROUP();
+extern _H5G_DATASET;   H5G_DATASET=_H5G_DATASET();
+extern _H5G_TYPE;      H5G_TYPE=_H5G_TYPE();
+extern _H5G_LINK;      H5G_LINK=_H5G_LINK();
+
 
 H5G_LINK_ERROR	= -1; /* link types used by H5Glink2 */
 H5G_LINK_HARD	= 0;
