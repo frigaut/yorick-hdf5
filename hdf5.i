@@ -1245,7 +1245,7 @@ func h5delete(file,object)
   status=_H5Gunlink(file, object);
 
   if (has2bclose) h5close,file;
-  if (status<0) error,"Unable to link groups";    
+  // if (status<0) error,"Unable to link groups";    
 }
 h5unlink=h5delete;
 
